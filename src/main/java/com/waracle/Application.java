@@ -11,8 +11,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.waracle.utils.InitialDataLoader;
 
 @SpringBootApplication
-@Configuration
-@ComponentScan
 @EnableJpaRepositories(basePackages={"com.waracle.repository"})
 public class Application {
 	

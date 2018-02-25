@@ -1,40 +1,39 @@
-sdfsdsdfTechnology Stack:
+Technology Stack:
 
+Java 8
 Spring boot
 Spring data repository
+Spring REST API
+Angular JS
 Mockito
-Java 8
 Maven
 
 
 Notes:
 
-- Created a restful Api that provides endpoints for returning list of cakes in json format and adding a new cake:
+- Created a restful Api that provide endpoints for returning list of cakes in json format and adding a new cake:
 
-  1- For getting list of cakes in json please use following urls:
+- Created a basic UI for getting list of cakes and adding a new cake (please use the following url to access)
 
 http://localhost:8080/cakes  
 http://localhost:8080/
 
-2- For find a cake of particular name
+- The above will direct to the web page that list the cakes in the system and the user can also add a new cake.
 
-http://localhost:8080/cakes/<name>
+- When the user add a cake, the list is updated to reflect the new entry and the message is displayed 'Cake successfully added'
 
- 3 - For adding cake please use following url
+- There are basic validations in place . e.g. The Add button will be only enable when the user inputs all the three 
+required fields. 
 
-url : http://localhost:8080/cakes
-method : POST
-json sample request format
-{ 
-  "name" : "cheese cake",
-   "description" : "This is cheese cake",
-   "image"  : "http:imageurl/image"
-}  
+- In addition the lengh of the text fields are restricted to the maximum length of the 
+attributes(the field maps to) in the database.
 
-The above endpoint create a new cake entry and on successful create return the status code 200 along with the list of all the cakes
-including the newly created cake.
+- In addition the UI displays error message if the cake with the name already exist in the database. 
+
+- The previous version of the code is refactored to decouple the CakeDto that represents the json from the model
+(Cake entity) and hence Converter is added to map dto to enitity and vice versa.
+- In addition the api returns an error code if the user tried to add cake with the name already exist in the database.
 
 Things assumed not to be required for this test:
 - logger implementation
-- Sending a customized status code in response if user tries to add a cake with the title already present. currently it returns 500.
 

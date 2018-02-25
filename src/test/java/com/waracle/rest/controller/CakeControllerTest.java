@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import com.waracle.exception.CakeAlreadyExistException;
 import com.waracle.model.Cake;
 import com.waracle.service.CakeManager;
+import com.warracle.dto.CakeDto;
 
 public class CakeControllerTest {
 	
@@ -48,11 +50,11 @@ public class CakeControllerTest {
     
     @Test
     public void testfindAllCakes() throws Exception {
-        List<Cake> cakes = Arrays.asList(
-        		new Cake("cheeseCake","This is cheese cake","testurl"),
-        		new Cake("vanillaCake","This is vanilla cake","testurl"));
-        when(cakeManager.findAllCakes()).thenReturn(cakes);
-        mockMvc.perform(get("/cakes"))
+        List<CakeDto> cakesDto = Arrays.asList(
+        		new CakeDto("cheeseCake","This is cheese cake","testurl"),
+        		new CakeDto("vanillaCake","This is vanilla cake","testurl"));
+        when(cakeManager.findAllCakes()).thenReturn(cakesDto);
+        mockMvc.perform(get("/cake-manager/cakes"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -66,9 +68,9 @@ public class CakeControllerTest {
     
     @Test
     public void testfindCakeByName() throws Exception {
-    	Cake cake = new Cake("cheeseCake","This is cheese cake","testurl");
-        when(cakeManager.findCakeByName("cheeseCake")).thenReturn(cake);
-        mockMvc.perform(get("/cakes/cheeseCake"))
+    	CakeDto cakeDto = new CakeDto("cheeseCake","This is cheese cake","testurl");
+        when(cakeManager.findCakeByName("cheeseCake")).thenReturn(cakeDto);
+        mockMvc.perform(get("/cake-manager/cakes/cheeseCake"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
                 .andExpect(jsonPath("name", is("cheeseCake")))
@@ -80,21 +82,24 @@ public class CakeControllerTest {
 	
 	@Test
 	public void testAddCakes() throws Exception {
-	    Cake cake =  new Cake("cheeseCake","This is cheese cake","testurl");
-        when(cakeManager.findAllCakes()).thenReturn(Arrays.asList(cake));
+	    CakeDto cakeDto =  new CakeDto("cheeseCake","This is cheese cake","testurl");
+        when(cakeManager.findAllCakes()).thenReturn(Arrays.asList(cakeDto));
+       // doThrow(new CakeAlreadyExistException("exception")).when(cakeManager).addNewCake(cakeDto);
         
         ObjectMapper mapper = new ObjectMapper();
-        String jsonInString = mapper.writeValueAsString(cake);
+        String jsonInString = mapper.writeValueAsString(cakeDto);
         
-        mockMvc.perform(post("/cakes")
+        mockMvc.perform(post("/cake-manager/cakes")
          .contentType(MediaType.APPLICATION_JSON)
          .content(jsonInString))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(1)))
         .andExpect(jsonPath("$[0].name", is("cheeseCake")))
         .andExpect(jsonPath("$[0].description", is("This is cheese cake")));
+  
 	 
 	}
+	
 
 
 }
