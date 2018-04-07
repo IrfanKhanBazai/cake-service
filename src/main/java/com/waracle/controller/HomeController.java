@@ -12,6 +12,7 @@ public class HomeController {
 	
 	@RequestMapping("/cakes")
 	public String home() {
+		System.out.print("dfadf");
 		return "index";
 	}
 }
